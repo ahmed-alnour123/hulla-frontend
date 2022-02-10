@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+List<Record>? records;
 
 class Record {
   final int? id;
   final String? username;
-  final String? grade;
+  final int? grade;
   final int? sura;
   final int? start;
   final int? end;
@@ -88,33 +91,28 @@ Future<bool> deleteRecord(int recordID) async {
   return response.body == 'success';
 }
 
-class User {
-  final String username;
-  final String name;
-  final bool isAdmin;
+String dateFormat(DateTime? date) {
+  return DateFormat('yyyy-MM-dd').format(date!);
+}
 
-  User(this.username, this.name, this.isAdmin);
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      json['username'],
-      json['name'],
-      json['admin'] == 1,
-    );
+String intToSura(int? index) {
+  switch (index) {
+    case 1:
+      return '';
+
+      break;
+    default:
+      return 'ERROR';
   }
 }
 
-Future<User> login(String username) async {
-  try {
-    final response = await http.Client().post(Uri.parse(''),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: json.encode({'username': username}));
-    if (response.statusCode == 200)
-      return User.fromJson(jsonDecode(response.body));
-    else
-      return User('ERROR', 'Wrong username', false);
-  } catch (err) {
-    return User('ERROR', 'connection problem', false);
+String intToGrade(int? grade) {
+  switch (grade) {
+    case 1:
+      return '';
+
+      break;
+    default:
+      return 'ERROR';
   }
 }
