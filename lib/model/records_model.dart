@@ -4,25 +4,41 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-List<Record>? records;
+List<Record>? records = [
+  Record(
+      id: "1",
+      start: '2',
+      end: '3',
+      sura: 1,
+      grade: 2,
+      date: '123456789',
+      username: 'abualm'),Record(
+      id: "3",
+      start: '2',
+      end: '3',
+      sura: 4,
+      grade: 2,
+      date: '2000-06-26',
+      username: 'abualm')
+];
 
 class Record {
-  final int? id;
-  final String? username;
-  final int? grade;
-  final int? sura;
-  final int? start;
-  final int? end;
-  final String? date;
+  final String? id;
+  final String username;
+  final int grade;
+  final int sura;
+  final String start;
+  final String end;
+  final String date;
 
   Record(
       {this.id,
-      this.username,
-      this.grade,
-      this.sura,
-      this.start,
-      this.end,
-      this.date});
+      required this.username,
+      required this.grade,
+      required this.sura,
+      required this.start,
+      required this.end,
+      required this.date});
 
   Map<String, dynamic> toMap() {
     return {
@@ -53,8 +69,8 @@ List<Record> parseRecords(String responseBody) {
   return parsed.map<Record>((json) => Record.fromJson(json)).toList();
 }
 
-Future<List<Record>> fetchPosts(
-    {required String username, required int start, required int end}) async {
+Future<List<Record>> fetchRecords(
+    {required String username, required String start, required String end}) async {
   final response = await http.Client().post(Uri.parse(''),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -82,7 +98,7 @@ Future<Record> editRecord(Record record) async {
   return Record.fromJson(jsonDecode(response.body));
 }
 
-Future<bool> deleteRecord(int recordID) async {
+Future<bool> deleteRecord(String? recordID) async {
   final response = await http.Client().post(Uri.parse(''),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -98,7 +114,7 @@ String dateFormat(DateTime? date) {
 String intToSura(int? index) {
   switch (index) {
     case 1:
-      return '';
+      return 'alfatiha';
 
       break;
     default:
@@ -109,7 +125,7 @@ String intToSura(int? index) {
 String intToGrade(int? grade) {
   switch (grade) {
     case 1:
-      return '';
+      return 'Good';
 
       break;
     default:

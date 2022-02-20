@@ -15,31 +15,80 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: Stack(children: [
+        body: Stack(alignment: Alignment.center, children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text('data'),
+              const Text(
+                'سجل الدخول باستخدام اسم المستخدم',
+                style: TextStyle(fontSize: 26),
+              ),
               const SizedBox(
                 height: 60,
               ),
-              TextField(
-                controller: controller,
+              Center(
+                child: Container(
+                  child: TextField(
+                    controller: controller,
+                  ),
+                  width: 160,
+                ),
               ),
-              ElevatedButton(
-                  onPressed: () async {
-                    // try login
-                    final username = controller!.text;
-                    _loading = true;
-                    user = await login(username);
-                    _loading = false;
-                    if (user?.username != 'ERROR') {
-                      Navigator.popAndPushNamed(context, 'home');
-                    } else {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text(user!.name)));
-                    }
-                  },
-                  child: const Text('Login'))
+              SizedBox(
+                height: 60,
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                      onPressed: () async {
+                        final username = controller!.text;
+                        ((setState) {
+                          _loading = true;
+                        });
+                        user = await loginStudent(username);
+
+                        if (user?.username != 'ERROR') {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('${user!.name} logged in!')));
+                          Navigator.popAndPushNamed(context, 'home');
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                               SnackBar(
+                                  content: Text(user!.name)));
+                        }
+                        ((setState) {
+                          _loading = false;
+                        });
+                      },
+                      child: const Text('Login as student')),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        final username = controller!.text;
+                        ((setState) {
+                          _loading = true;
+                        });
+                        user = await loginTeacher(username);
+
+                        if (user?.username != 'ERROR') {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('${user!.name} logged in!')));
+                          Navigator.popAndPushNamed(context, 'home');
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                               SnackBar(
+                                  content: Text(user!.name)));
+                        }
+                        ((setState) {
+                          _loading = false;
+                        });
+                      },
+                      child: const Text('Login as admin'))
+                ],
+              )
             ],
           ),
           if (_loading)
@@ -50,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   color: Colors.grey,
                 )),
-          if (_loading) Center(child: CircularProgressIndicator())
+          if (_loading) const Center(child: CircularProgressIndicator())
         ]));
   }
 }
