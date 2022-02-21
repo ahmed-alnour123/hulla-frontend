@@ -9,7 +9,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController? controller;
+  TextEditingController controller = TextEditingController();
   bool _loading = false;
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const Text(
                 'سجل الدخول باستخدام اسم المستخدم',
-                style: TextStyle(fontSize: 26),
+                style: TextStyle(fontSize: 20),
               ),
               const SizedBox(
                 height: 60,
@@ -35,27 +35,29 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: 160,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 60,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                       onPressed: () async {
-                        final username = controller!.text;
+                        final username = controller.text;
                         ((setState) {
                           _loading = true;
                         });
                         user = await loginStudent(username);
 
+                        print(username);
+
                         if (user?.username != 'ERROR') {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text('${user!.name} logged in!')));
-                          Navigator.popAndPushNamed(context, 'home');
+                          Navigator.popAndPushNamed(context, '/home');
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(
-                                  content: Text(user!.name)));
+                              SnackBar(content: Text(user!.name)));
                         }
                         ((setState) {
                           _loading = false;
@@ -67,20 +69,21 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   ElevatedButton(
                       onPressed: () async {
-                        final username = controller!.text;
+                        final username = controller.text;
                         ((setState) {
                           _loading = true;
                         });
+
                         user = await loginTeacher(username);
 
-                        if (user?.username != 'ERROR') {
+                        if (user.username != 'ERROR') {
+                          print('aaaaaaaaaaaaaaaaaaaaaaaa');
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                              content: Text('${user!.name} logged in!')));
-                          Navigator.popAndPushNamed(context, 'home');
+                              content: Text('${user.name} logged in!')));
+                          Navigator.popAndPushNamed(context, '/home');
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                               SnackBar(
-                                  content: Text(user!.name)));
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(user.name)));
                         }
                         ((setState) {
                           _loading = false;

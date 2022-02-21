@@ -5,25 +5,26 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 List<Record>? records = [
-  Record(
-      id: "1",
-      start: '2',
-      end: '3',
-      sura: 1,
-      grade: 2,
-      date: '123456789',
-      username: 'abualm'),Record(
-      id: "3",
-      start: '2',
-      end: '3',
-      sura: 4,
-      grade: 2,
-      date: '2000-06-26',
-      username: 'abualm')
+  // Record(
+  //     id: "1",
+  //     start: '2',
+  //     end: '3',
+  //     sura: 1,
+  //     grade: 2,
+  //     date: '123456789',
+  //     username: 'abualm'),
+  // Record(
+  //     id: "3",
+  //     start: '2',
+  //     end: '3',
+  //     sura: 4,
+  //     grade: 2,
+  //     date: '2000-06-26',
+  //     username: 'abualm')
 ];
 
 class Record {
-  final String? id;
+  String? id;
   final String username;
   final int grade;
   final int sura;
@@ -70,41 +71,77 @@ List<Record> parseRecords(String responseBody) {
 }
 
 Future<List<Record>> fetchRecords(
-    {required String username, required String start, required String end}) async {
-  final response = await http.Client().post(Uri.parse(''),
+    {required String username,
+    required String start,
+    required String end}) async {
+  final response = await http.Client().post(
+      Uri.parse('https://hulla-firebase.herokuapp.com/records'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json'
       },
       body: json.encode({'username': username, 'start': start, 'end': end}));
-
-  return parseRecords(response.body);
+  if (response.body != '[]' && response.statusCode == 200)
+    return parseRecords(response.body);
+  else if (response.body == '[]')
+    return [
+      Record(
+          username: 'username',
+          grade: 0,
+          sura: 0,
+          start: 'X',
+          end: 'X',
+          date: '        لا سجلات في هذه الفترة')
+    ];
+  else
+    return [
+      Record(
+          username: 'username',
+          grade: 0,
+          sura: 0,
+          start: 'X',
+          end: 'X',
+          date: 'حدثت مشكلة في الاتصال')
+    ];
 }
 
-Future<Record> addRecord(Record record) async {
-  final response = await http.Client().post(Uri.parse(''),
+Future<Record> addNewRecord(Record record) async {
+  final response = await http.Client().post(
+      Uri.parse('https://hulla-firebase.herokuapp.com/records/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json'
       },
       body: json.encode(record.toMap()));
-  return Record.fromJson(jsonDecode(response.body));
+  String data = response.body.toString();
+  record.id = data;
+  return record;
 }
 
-Future<Record> editRecord(Record record) async {
-  final response = await http.Client().post(Uri.parse(''),
+Future<String> editRecord(Record record) async {
+  final response = await http.Client().post(
+      Uri.parse('https://hulla-firebase.herokuapp.com/records/edit'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json'
       },
       body: json.encode(record.toMap()));
-  return Record.fromJson(jsonDecode(response.body));
+  print(json.encode(record.toMap()));
+  return response.body;
 }
 
 Future<bool> deleteRecord(String? recordID) async {
-  final response = await http.Client().post(Uri.parse(''),
+  try{final response = await http.Client().post(
+      Uri.parse('https://hulla-firebase.herokuapp.com/records/delete'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Accept': 'application/json'
       },
       body: json.encode({'id': recordID}));
-  return response.body == 'success';
+  return response.body == 'success';}
+  catch(err){
+    return false;
+  }
 }
 
 String dateFormat(DateTime? date) {

@@ -3,11 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 dynamic user;
-
-List<Student> students = [
-  Student('asas', 'التكروني'),
-  Student('username', 'منذر حافظ')
-];
+bool isAdmin = false;
+List<Student> students = [Student('username', 'name')];
 
 class Teacher {
   final String username;
@@ -40,37 +37,52 @@ List<Student> parseUsers(String responseBody) {
 
 Future<Student> loginStudent(String username) async {
   try {
-    final response = await http.Client().post(Uri.parse(''),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: json.encode({'username': username}));
+    final response = await http.Client()
+        .post(Uri.parse('https://hulla-firebase.herokuapp.com/login/students'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Accept': 'application/json',
+            },
+            body: jsonEncode({'username': username}));
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       students = [Student.fromJson(data)];
+      isAdmin = false;
       return Student(username, data['name']);
-    } else
+    } else {
       return Student('ERROR', 'Wrong username');
+    }
   } catch (err) {
-    return Student('ERROR', 'connection problem');
+    return Student('ERROR', "connection problem");
   }
 }
 
 Future<Teacher> loginTeacher(String username) async {
   try {
-    final response = await http.Client().post(Uri.parse(''),
+    final response = await http.Client().post(
+        Uri.parse('https://hulla-firebase.herokuapp.com/login/teachers'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json'
         },
         body: json.encode({'username': username}));
-    if (response.statusCode == 200) {
+    print(response.body);
+    if (response.body[0] == '{') {
       final data = jsonDecode(response.body);
-      students = parseUsers(data['studentlist']);
+
+      
+      if (!data['studentsList'].isEmpty) {
+        students = data['studentsList']
+            .map<Student>((s) => Student(s['username'], s['name']))
+            .toList();
+      }
+      isAdmin = true;
       return Teacher(username, data['name'], data["isAdmin"]);
     } else {
       return Teacher('ERROR', 'Wrong username', false);
     }
   } catch (err) {
-    return Teacher('ERROR', 'connection problem', false);
+    return Teacher('ERROR', err.toString(), false);
   }
 }
