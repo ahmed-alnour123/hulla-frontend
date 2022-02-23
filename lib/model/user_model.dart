@@ -60,18 +60,17 @@ Future<Student> loginStudent(String username) async {
 
 Future<Teacher> loginTeacher(String username) async {
   try {
-    final response = await http.Client().post(
-        Uri.parse('https://hulla-firebase.herokuapp.com/login/teachers'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Accept': 'application/json'
-        },
-        body: json.encode({'username': username}));
+    final response = await http.Client()
+        .post(Uri.parse('https://hulla-firebase.herokuapp.com/login/teachers'),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Accept': 'application/json',
+            },
+            body: json.encode({'username': username}));
     print(response.body);
     if (response.body[0] == '{') {
       final data = jsonDecode(response.body);
 
-      
       if (!data['studentsList'].isEmpty) {
         students = data['studentsList']
             .map<Student>((s) => Student(s['username'], s['name']))
@@ -83,6 +82,6 @@ Future<Teacher> loginTeacher(String username) async {
       return Teacher('ERROR', 'Wrong username', false);
     }
   } catch (err) {
-    return Teacher('ERROR', err.toString(), false);
+    return Teacher('ERROR', "connection problem", false);
   }
 }

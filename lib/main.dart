@@ -13,11 +13,8 @@ import 'package:hulla/model/records_model.dart';
 
 void main() {
   runApp(MaterialApp(
-    initialRoute: '/login',
-    routes: {
-      '/login': (context) => LoginScreen(),
-      '/home': (context) => Home()
-    },
+    initialRoute: '/',
+    routes: {'/': (context) => LoginScreen(), '/home': (context) => Home()},
   ));
 }
 
@@ -77,8 +74,11 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        title: Text('                       ${user?.name}'),
+        backgroundColor: Colors.green[800],
+        centerTitle: true,
+        title: Text('${user?.name}'),
       ),
       body: Stack(children: [
         Column(
@@ -110,6 +110,9 @@ class _HomeState extends State<Home> {
                         },
                         icon: Icon(Icons.date_range)),
                     ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStateProperty.all(Colors.green[900])),
                         onPressed: () async {
                           if (dateTimeRange != null) {
                             //require data
@@ -381,6 +384,7 @@ class _HomeState extends State<Home> {
       ]),
       floatingActionButton: (isAdmin)
           ? FloatingActionButton(
+              backgroundColor: Colors.green[500],
               child: Icon(Icons.add),
               onPressed: () {
                 showDialog(

@@ -1,7 +1,7 @@
 {
-    "name": "hulla",
-    "short_name": "hulla",
-    "start_url": ".",
+    "name": "حلة الأبرار",
+    "short_name": "حلة الأبرار",
+    "start_url": "/login",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",

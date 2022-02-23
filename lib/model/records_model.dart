@@ -87,8 +87,8 @@ Future<List<Record>> fetchRecords(
     return [
       Record(
           username: 'username',
-          grade: 0,
-          sura: 0,
+          grade: 5,
+          sura: 114,
           start: 'X',
           end: 'X',
           date: '        لا سجلات في هذه الفترة')
@@ -97,8 +97,8 @@ Future<List<Record>> fetchRecords(
     return [
       Record(
           username: 'username',
-          grade: 0,
-          sura: 0,
+          grade: 5,
+          sura: 114,
           start: 'X',
           end: 'X',
           date: 'حدثت مشكلة في الاتصال')
@@ -131,15 +131,16 @@ Future<String> editRecord(Record record) async {
 }
 
 Future<bool> deleteRecord(String? recordID) async {
-  try{final response = await http.Client().post(
-      Uri.parse('https://hulla-firebase.herokuapp.com/records/delete'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Accept': 'application/json'
-      },
-      body: json.encode({'id': recordID}));
-  return response.body == 'success';}
-  catch(err){
+  try {
+    final response = await http.Client().post(
+        Uri.parse('https://hulla-firebase.herokuapp.com/records/delete'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json'
+        },
+        body: json.encode({'id': recordID}));
+    return response.body == 'success';
+  } catch (err) {
     return false;
   }
 }

@@ -14,7 +14,12 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+        backgroundColor: Colors.grey[200],
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("حلة الأبرار"),
+          backgroundColor: Colors.green[800],
+        ),
         body: Stack(alignment: Alignment.center, children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -42,9 +47,12 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.green[900])),
                       onPressed: () async {
                         final username = controller.text;
-                        ((setState) {
+                        setState(() {
                           _loading = true;
                         });
                         user = await loginStudent(username);
@@ -59,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text(user!.name)));
                         }
-                        ((setState) {
+                        setState(() {
                           _loading = false;
                         });
                       },
@@ -68,9 +76,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: 16,
                   ),
                   ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(Colors.green[900])),
                       onPressed: () async {
                         final username = controller.text;
-                        ((setState) {
+                        setState(() {
                           _loading = true;
                         });
 
@@ -85,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text(user.name)));
                         }
-                        ((setState) {
+                        setState(() {
                           _loading = false;
                         });
                       },
@@ -102,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   color: Colors.grey,
                 )),
-          if (_loading) const Center(child: CircularProgressIndicator())
+          if (_loading) Center(child: CircularProgressIndicator())
         ]));
   }
 }
