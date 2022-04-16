@@ -75,7 +75,7 @@ Future<List<Record>> fetchRecords(
     required String start,
     required String end}) async {
   final response = await http.Client().post(
-      Uri.parse('https://hulla-firebase.herokuapp.com/records'),
+      Uri.parse('https://hulla-firebase-old.herokuapp.com/records'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json'
@@ -107,7 +107,7 @@ Future<List<Record>> fetchRecords(
 
 Future<Record> addNewRecord(Record record) async {
   final response = await http.Client().post(
-      Uri.parse('https://hulla-firebase.herokuapp.com/records/add'),
+      Uri.parse('https://hulla-firebase-old.herokuapp.com/records/add'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json'
@@ -120,7 +120,7 @@ Future<Record> addNewRecord(Record record) async {
 
 Future<String> editRecord(Record record) async {
   final response = await http.Client().post(
-      Uri.parse('https://hulla-firebase.herokuapp.com/records/edit'),
+      Uri.parse('https://hulla-firebase-old.herokuapp.com/records/edit'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Accept': 'application/json'
@@ -133,7 +133,7 @@ Future<String> editRecord(Record record) async {
 Future<bool> deleteRecord(String? recordID) async {
   try {
     final response = await http.Client().post(
-        Uri.parse('https://hulla-firebase.herokuapp.com/records/delete'),
+        Uri.parse('https://hulla-firebase-old.herokuapp.com/records/delete'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Accept': 'application/json'

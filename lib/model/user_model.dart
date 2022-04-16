@@ -37,13 +37,13 @@ List<Student> parseUsers(String responseBody) {
 
 Future<Student> loginStudent(String username) async {
   try {
-    final response = await http.Client()
-        .post(Uri.parse('https://hulla-firebase.herokuapp.com/login/students'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Accept': 'application/json',
-            },
-            body: jsonEncode({'username': username}));
+    final response = await http.Client().post(
+        Uri.parse('https://hulla-firebase-old.herokuapp.com/login/students'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({'username': username}));
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -60,13 +60,13 @@ Future<Student> loginStudent(String username) async {
 
 Future<Teacher> loginTeacher(String username) async {
   try {
-    final response = await http.Client()
-        .post(Uri.parse('https://hulla-firebase.herokuapp.com/login/teachers'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Accept': 'application/json',
-            },
-            body: json.encode({'username': username}));
+    final response = await http.Client().post(
+        Uri.parse('https://hulla-firebase-old.herokuapp.com/login/teachers'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+        },
+        body: json.encode({'username': username}));
     print(response.body);
     if (response.body[0] == '{') {
       final data = jsonDecode(response.body);
